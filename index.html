@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Clínica Salud </title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,Arial,sans-serif}
+body{background:linear-gradient(135deg,#edf6ff,#ffffff);color:#203247}
+
+/* HEADER */
+header{
+background:linear-gradient(90deg,#0b6fb8,#00a6d6);
+color:#fff;
+padding:20px;
+box-shadow:0 4px 14px rgba(0,0,0,.12)
+}
+.top{
+max-width:1300px;
+margin:auto;
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+gap:15px
+}
+.logo{font-size:30px;font-weight:700}
+.sub{font-size:13px;opacity:.9;margin-top:4px}
+
+/* GENERAL */
+button{
+border:none;
+padding:11px 18px;
+border-radius:10px;
+cursor:pointer;
+font-weight:700;
+color:#fff;
+background:linear-gradient(90deg,#0b6fb8,#00a6d6);
+transition:.25s
+}
+button:hover{
+transform:translateY(-2px);
+box-shadow:0 8px 18px rgba(0,0,0,.15)
+}
+.btn-red{background:linear-gradient(90deg,#df2e2e,#ff5577)}
+.btn-green{background:linear-gradient(90deg,#18a857,#43ca6e)}
+.btn-gray{background:#697784}
+.btn-dark{background:#23344a}
+
+input,select,textarea{
+width:100%;
+padding:11px 12px;
+border:1px solid #d8e4ef;
+border-radius:10px;
+outline:none;
+font-size:15px
+}
+input:focus,select:focus,textarea:focus{
+border-color:#0b6fb8;
+box-shadow:0 0 0 3px rgba(11,111,184,.12)
+}
+
+.box,.card,.panel{
+max-width:1300px;
+margin:22px auto;
+background:#fff;
+padding:22px;
+border-radius:18px;
+box-shadow:0 8px 20px rgba(0,0,0,.07)
+}
+
+.flex{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.title{font-size:24px;font-weight:700;color:#0b6fb8;margin-bottom:18px}
+
+table{width:100%;border-collapse:collapse}
+th{
+background:#eef7ff;
+padding:14px;
+color:#0b6fb8;
+font-size:14px
+}
+td{
+padding:14px;
+text-align:center;
+border-top:1px solid #edf2f7
+}
+tr:hover{background:#fafcff}
+
+.panel{display:none}
+.info{margin-top:18px;font-weight:700}
+
+/* MODAL LOGIN */
+.modal{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.45);
+justify-content:center;
+align-items:center;
+padding:15px;
+z-index:999
+}
+.login-box{
+background:#a4b8a5;
+width:100%;
+max-width:420px;
+padding:28px;
+text-align:center;
+border:2px solid #7cbce7;
+box-shadow:0 20px 45px rgba(0,0,0,.25)
+}
+.login-box h2{color:#fff;font-size:30px;margin-bottom:18px}
+.login-box input{
+margin-bottom:12px;
+border:2px solid #000000;
+border-radius:0
+}
+.login-box button{
+width:100%;
+border-radius:0;
+background:#d8d8d8;
+color:#000
+}
+
+/* PAGINA RESERVA */
+#paginaReserva{
+display:none;
+min-height:100vh;
+background:#2e2e2e;
+padding:30px
+}
+.reserva-wrap{
+max-width:900px;
+margin:auto;
+background:#555;
+padding:0;
+border:1px solid #888
+}
+.reserva-head{
+background:#8396c5;
+color:#fff;
+padding:18px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:26px;
+font-weight:600
+}
+.reserva-body{
+background:#6c6c6c;
+padding:25px
+}
+.form-reserva{
+max-width:700px;
+margin:auto;
+background:#8a8a8a;
+padding:20px;
+border:1px solid #cfcfcf
+}
+.form-reserva label{
+display:block;
+color:#fff;
+margin:10px 0 4px;
+font-size:22px
+}
+.form-reserva input,
+.form-reserva textarea{
+border-radius:0;
+padding:8px
+}
+.form-reserva button{
+margin-top:18px;
+display:block;
+margin-left:auto;
+margin-right:auto
+}
+
+footer{text-align:center;padding:25px;color:#666}
+
+@media(max-width:900px){
+.top{flex-direction:column;align-items:flex-start}
+.reserva-head{font-size:18px}
+.form-reserva label{font-size:18px}
+}
+</style>
+</head>
+
+<body>
+
+<div id="inicio">
+
+<header>
+<div class="top">
+<div>
+<div class="logo">CLÍNICA SALUD</div>
+<div class="sub">Atención médica moderna y confiable</div>
+</div>
+
+<button onclick="abrirLogin()">INICIAR SESIÓN</button>
+</div>
+</header>
+
+<div class="box">
+<div class="flex">
+<label><b>Seleccione fecha:</b></label>
+<input type="date" id="fechaCita" value="2026-04-16" style="width:180px">
+<button onclick="alert('Agenda actualizada')">BUSCAR</button>
+</div>
+</div>
+
+<div class="card">
+<div class="title">Agenda de Especialidades</div>
+
+<table id="tablaEspecialidades"></table>
+</div>
+
+<!-- PANEL ADMIN -->
+<div class="panel" id="panelAdmin">
+<div class="title">Administrador : alexa</div>
+
+<div style="text-align:right;margin-bottom:15px">
+<button class="btn-dark" onclick="volverInicio()">REGRESAR</button>
+<button class="btn-red" onclick="cerrarSesion()">CERRAR SESIÓN</button>
+</div>
+
+<table id="tablaAdmin"></table>
+
+<div class="info">
+DEBEN: <span id="deben">0</span> |
+PAGARON: <span id="pagaron">0</span> |
+TOTAL CITADOS: <span id="totalCitados">0</span>
+</div>
+</div>
+
+<div class="panel" id="panelMedico">
+<div class="title">Médico : Andree Garcia | Medicina General</div>
+
+<div style="text-align:right;margin-bottom:15px">
+<button class="btn-dark" onclick="volverInicio()">REGRESAR</button>
+<button class="btn-red" onclick="cerrarSesion()">CERRAR SESIÓN</button>
+</div>
+
+<table id="tablaMedico"></table>
+
+<div class="info">
+DEBEN: <span id="mdeben">0</span> |
+PAGARON: <span id="mpagaron">0</span> |
+TOTAL CITADOS: <span id="mtotal">0</span>
+</div>
+</div>
+
+<footer>© Clínica Salud - Sistema Web</footer>
+</div>
+
+<!-- LOGIN -->
+<div class="modal" id="modalLogin">
+<div class="login-box">
+<h2>Iniciar sesión</h2>
+
+<select id="tipoUsuario">
+<option>ADMINISTRADOR</option>
+<option>MEDICO</option>
+<option>CAJERO</option>
+</select><br><br>
+
+<input type="text" placeholder="Nombre de usuario">
+<input type="password" placeholder="Clave de usuario">
+
+<button onclick="ingresar()">👤 Acceder</button>
+
+<div style="margin-top:10px">
+<button class="btn-red" onclick="cerrarLogin()">Cerrar</button>
+</div>
+</div>
+</div>
+
+<!-- PAGINA RESERVA NUEVA -->
+<div id="paginaReserva">
+<div class="reserva-wrap">
+
+<div class="reserva-head">
+<div>Reservar citas</div>
+<div>Separar Citas</div>
+</div>
+
+<div class="reserva-body">
+<div class="form-reserva">
+
+<label>Especialidad</label>
+<input id="rEspecialidad" readonly>
+
+<label>Fecha</label>
+<input id="rFecha" readonly>
+
+<label>DNI Paciente</label>
+<input id="rDni" placeholder="Escriba DNI del paciente">
+
+<label>Nombre Paciente</label>
+<input id="rNombre" placeholder="Escriba Nombre del paciente">
+
+<label>Teléfono</label>
+<input id="rTelefono" placeholder="Escriba Teléfono">
+
+<label>Motivo</label>
+<textarea rows="3" id="rMotivo"></textarea>
+
+<div class="flex" style="justify-content:center;margin-top:15px">
+<button onclick="guardarReserva()">Guardar Reserva</button>
+<button class="btn-dark" onclick="cerrarReserva()">Regresar</button>
+</div>
+
+</div>
+</div>
+
+</div>
+</div>
+
+<script>
+let especialidades=[
+{id:1,nombre:"MEDICINA GENERAL",max:10,citados:4},
+{id:2,nombre:"ODONTOLOGIA",max:12,citados:8},
+{id:3,nombre:"PEDIATRIA",max:10,citados:10},
+{id:4,nombre:"OBSTETRICIA",max:8,citados:2},
+{id:5,nombre:"CARDIOLOGIA",max:6,citados:1}
+];
+
+let citas=[];
+let especialidadActual="";
+
+function cargarTabla(){
+let html=`
+<tr>
+<th>ITEM</th>
+<th>ESPECIALIDAD</th>
+<th>MAX</th>
+<th>CITADOS</th>
+<th>RESTANTES</th>
+<th>ACCIÓN</th>
+</tr>`;
+
+especialidades.forEach(e=>{
+let restantes=e.max-e.citados;
+
+let boton=restantes>0
+? `<button onclick="abrirReserva('${e.nombre}')">REALIZAR CITA</button>`
+: `<button class="btn-red">AGOTADAS</button>`;
+
+html+=`
+<tr>
+<td>${e.id}</td>
+<td>${e.nombre}</td>
+<td>${e.max}</td>
+<td>${e.citados}</td>
+<td>${restantes}</td>
+<td>${boton}</td>
+</tr>`;
+});
+
+document.getElementById("tablaEspecialidades").innerHTML=html;
+}
+cargarTabla();
+
+/* RESERVA NUEVA PAGINA */
+function abrirReserva(nombre){
+especialidadActual=nombre;
+document.getElementById("inicio").style.display="none";
+document.getElementById("paginaReserva").style.display="block";
+
+document.getElementById("rEspecialidad").value=nombre;
+document.getElementById("rFecha").value=document.getElementById("fechaCita").value;
+}
+
+function cerrarReserva(){
+document.getElementById("paginaReserva").style.display="none";
+document.getElementById("inicio").style.display="block";
+}
+
+function guardarReserva(){
+let dni=document.getElementById("rDni").value;
+let nombre=document.getElementById("rNombre").value;
+let telefono=document.getElementById("rTelefono").value;
+let motivo=document.getElementById("rMotivo").value;
+
+if(dni==="" || nombre===""){
+alert("Complete datos");
+return;
+}
+
+citas.push({
+dni,nombre,telefono,motivo,
+fecha:document.getElementById("rFecha").value,
+especialidad:especialidadActual,
+estado:"DEBE"
+});
+
+let e=especialidades.find(x=>x.nombre===especialidadActual);
+e.citados++;
+
+alert("Reserva guardada correctamente");
+cargarTabla();
+cerrarReserva();
+
+document.getElementById("rDni").value="";
+document.getElementById("rNombre").value="";
+document.getElementById("rTelefono").value="";
+document.getElementById("rMotivo").value="";
+}
+
+/* LOGIN */
+function abrirLogin(){
+document.getElementById("modalLogin").style.display="flex";
+}
+function cerrarLogin(){
+document.getElementById("modalLogin").style.display="none";
+}
+
+function ingresar(){
+let tipo = document.getElementById("tipoUsuario").value;
+
+cerrarLogin();
+
+/* ADMINISTRADOR */
+if(tipo==="ADMINISTRADOR"){
+
+let nueva = window.open("","_blank");
+
+nueva.document.write(`
+<html>
+<head>
+<title>Administrador</title>
+<style>
+body{font-family:Segoe UI;background:#eef7ff;padding:30px}
+.card{background:#fff;padding:25px;border-radius:15px}
+table{width:100%;border-collapse:collapse}
+th,td{padding:12px;border:1px solid #ddd;text-align:center}
+th{background:#0b6fb8;color:white}
+button{padding:10px 15px;border:none;border-radius:8px;background:#0b6fb8;color:#fff}
+</style>
+</head>
+<body>
+<div class='card'>
+<h2>Administrador - Juan Luis Lopez</h2>
+<button onclick="window.close()">Cerrar</button>
+<br><br>
+<table>
+<tr>
+<th>ITEM</th>
+<th>PACIENTE</th>
+<th>FECHA</th>
+<th>ESPECIALIDAD</th>
+<th>ESTADO</th>
+</tr>
+</table>
+</div>
+</body>
+</html>
+`);
+
+}
+
+/* MEDICO */
+else if(tipo==="MEDICO"){
+
+let nueva = window.open("","_blank");
+
+nueva.document.write(`
+<html>
+<head>
+<title>Médico</title>
+<style>
+body{font-family:Segoe UI;background:#eef7ff;padding:30px}
+.card{background:#fff;padding:25px;border-radius:15px}
+table{width:100%;border-collapse:collapse}
+th,td{padding:12px;border:1px solid #ddd;text-align:center}
+th{background:#0b6fb8;color:white}
+button{padding:10px 15px;border:none;border-radius:8px;background:#0b6fb8;color:#fff}
+</style>
+</head>
+<body>
+<div class='card'>
+<h2>Médico - Andree Garcia</h2>
+<button onclick="window.close()">Cerrar</button>
+<br><br>
+<table>
+<tr>
+<th>ITEM</th>
+<th>PACIENTE</th>
+<th>FECHA</th>
+<th>ESTADO</th>
+</tr>
+</table>
+</div>
+</body>
+</html>
+`);
+
+}
+
+/* CAJERO */
+else{
+
+let nueva = window.open("","_blank");
+
+nueva.document.write(`
+<html>
+<head>
+<title>Cajero</title>
+<style>
+body{font-family:Segoe UI;background:#eef7ff;padding:30px}
+.card{background:#fff;padding:25px;border-radius:15px}
+table{width:100%;border-collapse:collapse}
+th,td{padding:12px;border:1px solid #ddd;text-align:center}
+th{background:#0b6fb8;color:white}
+button{padding:10px 15px;border:none;border-radius:8px;background:#0b6fb8;color:#fff}
+</style>
+</head>
+<body>
+<div class='card'>
+<h2>Cajero - Maria Luz</h2>
+<button onclick="window.close()">Cerrar</button>
+<br><br>
+<table>
+<tr>
+<th>ITEM</th>
+<th>PACIENTE</th>
+<th>MONTO</th>
+<th>ACCIÓN</th>
+</tr>
+</table>
+</div>
+</body>
+</html>
+`);
+
+}
+
+}
+
+</script>
